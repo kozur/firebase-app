@@ -1,0 +1,7 @@
+#ventanaMensajes{
+    height: 50vh;
+    overflow-y: auto;
+}
+#mensaje{
+    padding-right: 10%;
+}

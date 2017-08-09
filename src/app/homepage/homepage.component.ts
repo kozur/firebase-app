@@ -80,17 +80,11 @@ export class HomepageComponent implements OnInit, AfterViewChecked {
     //this.usuariosService.editarMensaje(mensaje, "lalala");
   }
 
-  esTuMensaje(email) {
+  me(email) {
     if (email == this.loginService.email)
       return true;
     else
       return false;
-  }
-  esMiMensaje(email) {
-    if (email == this.loginService.email)
-      return false;
-    else
-      return true;
   }
 
 

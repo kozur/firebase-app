@@ -22,7 +22,7 @@ export class UsuariosService {
         public db: AngularFireDatabase,
         private usuarioRestService: UsuarioRestService
     ) {
-        this.usuarios = db.list('usuarios', { preserveSnapshot: true });
+        this.usuarios = db.list('usuarios');
 
         var dato = firebase.database().ref('usuarios').once('value').then(function (snapshot) {
             snapshot.val();
@@ -37,23 +37,26 @@ export class UsuariosService {
             email: auth.email,
             photo: auth.photoURL
         };
-        this.eliminarUsuarios(usuario.email);
 
-        this.usuarios.push(usuario);
-    }
-    eliminarUsuarios(email:string) {
-        this.usuarioRestService.getUsuariosPorEmail(email).subscribe(
+        console.log("Antes del getUsuariosPorEmal")
+        this.usuarioRestService.getUsuariosPorEmail(usuario.email).subscribe(
             respuesta => {
+                console.log("Dentro getUsuariosPorEmail")
                 let array = Object.keys(respuesta);
                 array.forEach(element => {
+                    console.log("ForEach")
                     this.usuarioRestService.deleteUsuario(element).subscribe(
                         elim => {
                             console.log("Se elimino el usuario: " + element + " respuesta: " + elim);
                         }
                     );
                 });
+                console.log("Despues del Foreach")
+                this.usuarios.push(usuario);
+                console.log("Despues del push")
             }
         );
+        console.log("Despues del getUsuariosPorEmail")
     }
 
     editarMensaje(mensaje: any, newValue: string): void {

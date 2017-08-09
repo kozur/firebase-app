@@ -2,6 +2,11 @@
     height: 50vh;
     overflow-y: auto;
 }
+#mensajes{
+    height: :auto;
+}
 #mensaje{
-    padding-right: 10%;
+    /* border-style: solid;
+    border-color: red; */
+    word-wrap: break-word;
 }

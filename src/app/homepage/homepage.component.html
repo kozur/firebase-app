@@ -1,28 +1,26 @@
-<!-- inicio
-
- <ul>
-  <li *ngFor="let key of listaUsuarios">
-    {{usuariosRest[key].displayName}}
-  </li>
-</ul>
-
-fin -->
-
 <div class="row">
 
   <div class="col s8">
     Mensajes
     <ul class="collection" id="ventanaMensajes">
-      <li class="collection-item avatar" *ngFor="let mensaje of mensajes | async" (change)="scroll()">
-        <img src={{mensaje.photoURL}} alt="" class="circle">
-        <div id="mensaje"><span class="title">{{mensaje.mensaje}}</span></div>
-        <p>{{mensaje.displayName}} <br> {{mensaje.timestamp | date:"dd/MM/yyyy hh:mm:ss"}}
-        </p>
-        <a (click)="borrarMensaje(mensaje)" class="secondary-content"><i class="material-icons">delete</i></a>
+      <li class="collection-item avatar" *ngFor="let mensaje of mensajes | async" (change)="scroll()" [ngClass]=" me(mensaje.email)? 'grey lighten-2': 'grey lighten-3'" id="mensajes">
+        <div class="col s3">
+          <div class="chip">
+            <img src="{{mensaje.photoURL}}" alt="Contact Person">{{mensaje.displayName}}
+          </div>
+        </div>
+        <div class="col s8">
+          <div [ngClass]=" me(mensaje.email)? 'right-align': 'left-align'" id="mensaje">{{mensaje.mensaje}}</div>
+
+          <a *ngIf="me(mensaje.email)" (click)="borrarMensaje(mensaje)" class="secondary-content"><i class="material-icons">delete</i></a>
+        </div>
+        <!-- <br> {{mensaje.timestamp | date:"dd/MM/yyyy hh:mm:ss"}} -->
+
       </li>
     </ul>
     <div class="input-field">
-      <textarea [(ngModel)]="mensajeNuevo" id="textarea1" class="materialize-textarea" (keyup.enter)="enviarMensaje()" data-length="300" maxlength="300"></textarea>
+      <textarea [(ngModel)]="mensajeNuevo" id="textarea1" class="materialize-textarea" (keyup.enter)="enviarMensaje()" data-length="180"
+        maxlength="180"></textarea>
       <label for="textarea1">Tu mensaje</label>
     </div>
     <a (click)="enviarMensaje()" class="waves-effect waves-light btn">Enviar</a>
@@ -36,6 +34,7 @@ fin -->
         <span class="title">{{usuario.displayName}}</span>
         <p>{{usuario.email}}
         </p>
+        <a *ngIf="me(usuario.email)" class="secondary-content"><i class="material-icons">edit</i></a>
       </li>
     </ul>
     <a (click)="desloguear()" class="waves-effect waves-light btn">Desloguear</a>

@@ -17,17 +17,14 @@ export class UsuariosService {
     public usuariosRest: any;
     public listaUsuarios: any[];
 
+    public currentUser: any;
+
     constructor(
         public af: AngularFireAuth,
         public db: AngularFireDatabase,
         private usuarioRestService: UsuarioRestService
     ) {
         this.usuarios = db.list('usuarios');
-
-        var dato = firebase.database().ref('usuarios').once('value').then(function (snapshot) {
-            snapshot.val();
-
-        });
     }
 
 
@@ -38,25 +35,19 @@ export class UsuariosService {
             photo: auth.photoURL
         };
 
-        console.log("Antes del getUsuariosPorEmal")
         this.usuarioRestService.getUsuariosPorEmail(usuario.email).subscribe(
             respuesta => {
-                console.log("Dentro getUsuariosPorEmail")
                 let array = Object.keys(respuesta);
                 array.forEach(element => {
-                    console.log("ForEach")
                     this.usuarioRestService.deleteUsuario(element).subscribe(
                         elim => {
-                            console.log("Se elimino el usuario: " + element + " respuesta: " + elim);
                         }
                     );
                 });
-                console.log("Despues del Foreach")
-                this.usuarios.push(usuario);
-                console.log("Despues del push")
+                this.currentUser = this.usuarios.push(usuario);
+                console.log(this.currentUser.key);
             }
         );
-        console.log("Despues del getUsuariosPorEmail")
     }
 
     editarMensaje(mensaje: any, newValue: string): void {
@@ -64,10 +55,11 @@ export class UsuariosService {
             .update({ displayName: newValue });
     }
 
-    borrarUsuario(usuario: any) {
-        console.log(usuario.$key);
-        this.usuarios.remove(usuario.$key).then(
-            _ => console.log("Usuario deslogueado: ", usuario.email)
+    borrarUsuario() {
+        this.usuarios.remove(this.currentUser.key).then(
+            _ => {
+                console.log("Usuario deslogueado: ", this.currentUser.key);
+            }
         );
     }
 

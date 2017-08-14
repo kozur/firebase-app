@@ -1,6 +1,6 @@
 import { Router } from "@angular/router";
 
-import { Component, OnInit, AfterViewChecked, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewChecked, ElementRef, ViewChild } from '@angular/core';
 import { LoginService } from "../../providers/login";
 import { UsuariosService } from "../../providers/usuarios";
 import { FirebaseListObservable } from "angularfire2/database";
@@ -17,7 +17,8 @@ declare var $: any;
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.css']
 })
-export class HomepageComponent implements OnInit, AfterViewChecked {
+export class HomepageComponent implements AfterViewChecked{
+
 
   name: any;
   email: any;
@@ -42,26 +43,20 @@ export class HomepageComponent implements OnInit, AfterViewChecked {
 
     this.usuarios = this.usuariosService.usuarios;
     this.mensajes.subscribe(x => this.cambio = true);
+
+
+    window.onbeforeunload = function (e) {
+      loginService.salirChat();
+      return 'salirChat';
+    }
   }
 
-  ngOnInit() {
-    // this.getUsuarios();
-  }
-  getUsuarios() {
-    // this.usuarioRestService.getUsuarios().subscribe(
-    //   listaUsuarios => {
-    //     this.usuariosRest = listaUsuarios;
-    //     this.listaUsuarios = Object.keys(this.usuariosRest);
-    //   }
-    // );
-  }
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
 
   ngAfterViewChecked() {
     if (this.cambio) {
       this.scroll();
     }
-    // this.scroll();
   }
 
   enviarMensaje() {
@@ -77,7 +72,6 @@ export class HomepageComponent implements OnInit, AfterViewChecked {
 
   borrarMensaje(mensaje: string) {
     this.loginService.borrarMensaje(mensaje);
-    //this.usuariosService.editarMensaje(mensaje, "lalala");
   }
 
   me(email) {

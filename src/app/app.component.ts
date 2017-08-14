@@ -23,7 +23,6 @@ export class AppComponent {
           this.loginService.displayName = auth.displayName;
           this.loginService.email = auth.email;
           this.loginService.photoURL = auth.photoURL;
-          this.loginService.auth = auth;
           console.log('Logueado correctamente.');
           this.estaLogueado = true;
           this.usuarioService.agregarUsuario(auth);

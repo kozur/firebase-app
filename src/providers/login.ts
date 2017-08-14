@@ -13,7 +13,6 @@ export class LoginService {
     public mensajes: FirebaseListObservable<any>;
     public displayName: string;
     public email: string;
-    public auth: any;
     public photoURL: any;
 
     constructor(public af: AngularFireAuth, public db: AngularFireDatabase, public usuarioService: UsuariosService) {
@@ -26,9 +25,11 @@ export class LoginService {
     }
 
     logout() {
-        this.usuarioService.borrarUsuario(this.auth);
-        this.auth = null;
+        this.usuarioService.borrarUsuario();        
         return this.af.auth.signOut();
+    }
+    salirChat(){
+        this.usuarioService.borrarUsuario();
     }
 
     enviarMensaje(text: string) {
@@ -43,7 +44,6 @@ export class LoginService {
     }
 
     borrarMensaje(mensaje: any) {
-        // this.db.object('/mensajes/' + mensaje.$key).remove();
         this.mensajes.remove(mensaje.$key).then(
             _ => console.log("Mensaje borrado")
         )
